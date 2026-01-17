@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#E8D5C4">
+    <meta name="description" content="Mensagens diárias de fé e reflexão">
+    <title>Palavra Diária</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=Inter:wght@300;400;500&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s ease;
+        }
+        
+        .verse-text {
+            font-family: 'Crimson Pro', serif;
+            line-height: 1.8;
+        }
+        
+        .card {
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        }
+        
+        .btn {
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .dark {
+            background-color: #1a1a2e;
+            color: #eee;
+        }
+        
+        .dark .card {
+            background-color: rgba(42, 42, 62, 0.95);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#E8D5C4] via-[#F5EBE0] to-[#D4C5B9] p-4">
+    
+    <button id="darkModeToggle" class="fixed top-4 right-4 p-3 rounded-full bg-white/80 dark:bg-gray-800/80 shadow-lg btn z-10">
+        <svg id="sunIcon" class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="4" stroke-width="2"></circle>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41"></path>
+        </svg>
+        <svg id="moonIcon" class="w-6 h-6 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+
+    <div class="card w-full max-w-lg bg-white/95 dark:bg-gray-800/95 rounded-3xl p-8 md:p-12 fade-in">
+        
+        <div class="text-center mb-8">
+            <div class="inline-block p-3 bg-gradient-to-br from-[#A8DADC] to-[#457B9D] rounded-2xl mb-4">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                </svg>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-semibold text-gray-800 dark:text-gray-100">Palavra Diária</h1>
+        </div>
+
+        <div id="messageContent" class="mb-8">
+            <p class="verse-text text-xl md:text-2xl font-light text-gray-700 dark:text-gray-200 mb-6 text-center leading-relaxed" id="verse"></p>
+            <p class="text-sm md:text-base font-medium text-[#457B9D] dark:text-[#A8DADC] mb-6 text-center" id="reference"></p>
+            <p class="text-base md:text-lg text-gray-600 dark:text-gray-300 text-center italic" id="reflection"></p>
+        </div>
+
+        <div class="flex flex-col gap-3">
+            <button id="newMessageBtn" class="btn w-full bg-gradient-to-r from-[#457B9D] to-[#1D3557] text-white py-4 rounded-xl font-medium flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                Nova Mensagem
+            </button>
+            
+            <div class="grid grid-cols-2 gap-3">
+                <button id="shareBtn" class="btn bg-[#25D366] text-white py-3 rounded-xl font-medium flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                    WhatsApp
+                </button>
+                
+                <button id="copyBtn" class="btn bg-gray-600 dark:bg-gray-700 text-white py-3 rounded-xl font-medium flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                    </svg>
+                    Copiar
+                </button>
+            </div>
+        </div>
+
+        <div id="notification" class="hidden mt-4 p-3 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-lg text-center text-sm"></div>
+    </div>
+
+    <script>
+        const messages = [
+            {
+                verse: "Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito, para que todo aquele que nele crê não pereça, mas tenha a vida eterna.",
+                reference: "João 3:16",
+                reflection: "O amor de Deus é incondicional e eterno. Hoje, permita-se sentir esse amor em sua vida."
+            },
+            {
+                verse: "Tudo posso naquele que me fortalece.",
+                reference: "Filipenses 4:13",
+                reflection: "A força para vencer está em você através de Deus. Confie e siga em frente."
+            },
+            {
+                verse: "O Senhor é meu pastor; nada me faltará.",
+                reference: "Salmos 23:1",
+                reflection: "Deus cuida de cada detalhe da sua vida. Descanse nessa certeza hoje."
+            },
+            {
+                verse: "Entrega o teu caminho ao Senhor; confia nele, e ele o fará.",
+                reference: "Salmos 37:5",
+                reflection: "Você não precisa carregar tudo sozinho. Entregue seus planos a Deus."
+            },
+            {
+                verse: "Não temais, porque eu sou contigo; não vos assombreis, porque eu sou o vosso Deus.",
+                reference: "Isaías 41:10",
+                reflection: "O medo não vem de Deus. Ele está com você em cada momento."
+            },
+            {
+                verse: "E sabemos que todas as coisas contribuem juntamente para o bem daqueles que amam a Deus.",
+                reference: "Romanos 8:28",
+                reflection: "Mesmo nos momentos difíceis, Deus está trabalhando para o seu bem."
+            },
+            {
+                verse: "Lançando sobre ele toda a vossa ansiedade, porque ele tem cuidado de vós.",
+                reference: "1 Pedro 5:7",
+                reflection: "Suas preocupações importam para Deus. Entregue-as a Ele hoje."
+            },
+            {
+                verse: "Bem-aventurados os puros de coração, porque eles verão a Deus.",
+                reference: "Mateus 5:8",
+                reflection: "A pureza do coração abre caminho para a presença de Deus."
+            },
+            {
+                verse: "Buscai primeiro o Reino de Deus, e a sua justiça, e todas essas coisas vos serão acrescentadas.",
+                reference: "Mateus 6:33",
+                reflection: "Priorize sua relação com Deus e tudo o mais se alinhará."
+            },
+            {
+                verse: "A minha graça te basta, porque o meu poder se aperfeiçoa na fraqueza.",
+                reference: "2 Coríntios 12:9",
+                reflection: "Sua fraqueza é uma oportunidade para a força de Deus brilhar."
+            }
+        ];
+
+        let currentMessage = null;
+
+        function getMessageOfDay() {
+            const today = new Date();
+            const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+            return messages[dayOfYear % messages.length];
+        }
+
+        function getRandomMessage() {
+            let newMessage;
+            do {
+                newMessage = messages[Math.floor(Math.random() * messages.length)];
+            } while (newMessage === currentMessage && messages.length > 1);
+            return newMessage;
+        }
+
+        function displayMessage(message) {
+            currentMessage = message;
+            document.getElementById('verse').textContent = message.verse;
+            document.getElementById('reference').textContent = message.reference;
+            document.getElementById('reflection').textContent = message.reflection;
+            
+            const content = document.getElementById('messageContent');
+            content.classList.remove('fade-in');
+            void content.offsetWidth;
+            content.classList.add('fade-in');
+        }
+
+        function showNotification(text) {
+            const notification = document.getElementById('notification');
+            notification.textContent = text;
+            notification.classList.remove('hidden');
+            setTimeout(() => notification.classList.add('hidden'), 3000);
+        }
+
+        function getMessageText() {
+            return `📖 *${currentMessage.verse}*\n\n_${currentMessage.reference}_\n\n💭 ${currentMessage.reflection}\n\n🙏 Palavra Diária`;
+        }
+
+        document.getElementById('newMessageBtn').addEventListener('click', () => {
+            displayMessage(getRandomMessage());
+        });
+
+        document.getElementById('shareBtn').addEventListener('click', () => {
+            const text = encodeURIComponent(getMessageText());
+            window.open(`https://wa.me/?text=${text}`, '_blank');
+        });
+
+        document.getElementById('copyBtn').addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(getMessageText());
+                showNotification('✓ Texto copiado!');
+            } catch (err) {
+                showNotification('Erro ao copiar texto');
+            }
+        });
+
+        document.getElementById('darkModeToggle').addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+            document.getElementById('sunIcon').classList.toggle('hidden');
+            document.getElementById('moonIcon').classList.toggle('hidden');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark'));
+        });
+
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark');
+            document.getElementById('sunIcon').classList.add('hidden');
+            document.getElementById('moonIcon').classList.remove('hidden');
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(() => {});
+        }
+
+        displayMessage(getMessageOfDay());
+    </script>
+</body>
+</html>
